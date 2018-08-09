@@ -1,3 +1,4 @@
+# -*- encoding=utf-8 -*-
 #创建一个空列表
 member = []
 print(member)
