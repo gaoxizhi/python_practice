@@ -45,6 +45,7 @@ nosetests.xml
 coverage.xml
 *.cover
 .hypothesis/
+.pytest_cache/
 
 # Translations
 *.mo
@@ -55,6 +56,7 @@ coverage.xml
 .static_storage/
 .media/
 local_settings.py
+db.sqlite3
 
 # Flask stuff:
 instance/
@@ -74,13 +76,14 @@ target/
 
 # pyenv
 .python-version
-
+.idea/
+python_practice.iml
 # celery beat schedule file
 celerybeat-schedule
-
+workspace.xml
 # SageMath parsed files
 *.sage.py
-
+.idea/workspace.xml
 # Environments
 .env
 .venv
@@ -102,3 +105,6 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# vscode
+.vscode
