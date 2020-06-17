@@ -1,7 +1,7 @@
-#-*-encoding=utf-8-*-
+# -*-encoding=utf-8-*-
 
-from pyquery import PyQuery as pq
 import requests
+from pyquery import PyQuery as pq
 
 # 推荐使用方式（爬取数据使用urllib嚯requests，pyquery主要负责解析数据）
 

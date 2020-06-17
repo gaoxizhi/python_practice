@@ -1,3 +1,4 @@
+# -*- encoding=utf-8 -*-
 def gen_data_from_file(file_name):
     for line in open(file_name):
         yield line

@@ -1,7 +1,7 @@
-#-*-encoding=utf-8-*-
+# -*-encoding=utf-8-*-
 from lxml import etree
 
-#读取html文件信息
+# 读取html文件信息
 f = open('my.html', "r", encoding="utf-8")
 content = f.read()
 f.close()
@@ -59,5 +59,5 @@ result = html.xpath("//table/tbody/child::tr[@class='tt']")
 # 节点遍历（多层解析）
 result = html.xpath("//li/a")
 for v in result:
-    print(v.xpath("text()")[0]+":"+v.xpath("@href")[0])
+    print(v.xpath("text()")[0] + ":" + v.xpath("@href")[0])
     print(v.text + ":" + v.get('href'))

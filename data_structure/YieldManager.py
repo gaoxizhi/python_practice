@@ -1,12 +1,11 @@
 # -*- coding:utf-8 -*-
-''' 环境：python 2.x 
+""" 环境：python 2.x
     类似延迟加载，模拟异步服务器过程
-'''
+"""
 
-import sys
+import time
 # import Timer
 import types
-import time
 
 
 class YieldManager(object):

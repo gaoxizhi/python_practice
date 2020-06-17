@@ -1,7 +1,7 @@
-#-*-encoding=utf-8-*-
+# -*-encoding=utf-8-*-
 from bs4 import BeautifulSoup
 
-#读取html文件信息
+# 读取html文件信息
 f = open('my.html', "r", encoding="utf-8")
 content = f.read()
 f.close()

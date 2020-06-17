@@ -1,7 +1,7 @@
 # -*- encoding=utf-8 -*-
 
 size = ''
-while (not (isinstance(size, int))):
+while not (isinstance(size, int)):
     try:
         # eval 自动类型转换
         size = eval(size)

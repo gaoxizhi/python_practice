@@ -1,9 +1,14 @@
-#-*-encoding=utf-8-*-
+# -*-encoding=utf-8-*-
 
 import requests, time, ssl, os
 from bs4 import BeautifulSoup
 from urllib.request import urlretrieve
 from urllib.error import URLError
+
+'''
+
+
+'''
 
 # 全局取消证书验证
 # 异常----> SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed
@@ -11,6 +16,8 @@ ssl._create_default_https_context = ssl._create_unverified_context
 
 url = "https://list.jd.com/list.html?cat=9987,653,655"
 
+# 目标存放位置
+path = "/Users/gaox/data/p"
 res = requests.get(url)
 # print(res.text)
 
@@ -24,9 +31,9 @@ print("本页中商品数量：", len(img_list))
 # 遍历
 m = 0
 # 判断或创建文件夹
-if not os.path.exists("./mypic/"):
-    if not os.path.isdir("./mypic/"):
-        os.mkdir("./mypic/")
+if not os.path.exists(path):
+    if not os.path.isdir(path):
+        os.mkdir(path)
 
 for img in img_list:
     m += 1
@@ -36,7 +43,7 @@ for img in img_list:
     else:
         # 京东使用类似懒加载的方式
         img_url = "https:" + img.attrs['data-lazy-img']
-    img_file = ("./mypic/p" + str(m) + ".jpg")
+    img_file = (path + os.path.sep + "p" + str(m) + ".jpg")
 
     # 拦截超时，并重试机制
     count = 1
@@ -50,7 +57,7 @@ for img in img_list:
             count += 1
     if count > 5:
         print("download job failed!")
-    
+
     # 另一种实现方式
     '''
     with requests.get(img_url, stream=True) as ir:
