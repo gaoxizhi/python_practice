@@ -21,7 +21,7 @@ from pyquery import PyQuery
 
 def main():
     # 设置父目录
-    dir_path = "/Users/gaox/Documents/拉勾教育"
+    dir_path = "/Users/gaox/Downloads/new"
     dir = os.listdir(dir_path)
     # 遍历父目录，以其子项为最小单元
     for i in dir:
@@ -43,22 +43,17 @@ def main():
 
                     for k in os.listdir(chapter_path):
                         file_path = os.path.join(chapter_path, k)
-                        # 1、进入其子目录删除css、js文件
-                        # if file_path.endswith(".css") or file_path.endswith(".js"):
-                        if not (file_path.endswith(".png") or file_path.endswith(".jpg")):
-                            os.remove(file_path)
-                            print("删除文件【%s】..." % file_path)
-
-                        # 将图片资源移动到img_path，已存在则不处理
-                        if file_path.endswith(".png") or file_path.endswith(".jpg"):
+                        # 2、进入其子目录将图片资源移动到img_path，已存在则不处理
+                        if file_path.endswith(".png") or file_path.endswith(".jpg") or file_path.endswith("jpeg") \
+                                or file_path.endswith("bmp") or file_path.endswith("gif"):
                             if not os.path.exists(os.path.join(img_path, k)):
                                 shutil.move(file_path, img_path)
 
-                    # 清理文件夹，不包含img文件夹
+                    # 清理文件夹包含css、js等文件，不包含img文件夹
                     if not j == "img":
                         for k in os.listdir(chapter_path):
                             file_path = os.path.join(chapter_path, k)
-                            print("清理无用文件【%s】..." % file_path)
+                            print("清理文件【%s】..." % file_path)
                             os.remove(file_path)
 
                 # 处理html中资源路径
@@ -92,7 +87,8 @@ def get_pure_text(file_path, img_path):
         src = i.attr('src')
         # 图片资源路径空
         if not None == src:
-            if src.endswith(".png") or src.endswith(".jpg"):
+            if src.endswith(".png") or src.endswith(".jpg") or file_path.endswith("jpeg") \
+                    or file_path.endswith("bmp") or file_path.endswith("gif"):
                 local_img_dir_path = img_path.split("/")[-1]
                 # svg 图片 不处理
 
