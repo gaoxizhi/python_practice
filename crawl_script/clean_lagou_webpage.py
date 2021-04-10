@@ -2,9 +2,8 @@
 
 import os
 import shutil
-from xml.sax.saxutils import escape
 
-from pyquery import PyQuery as pq
+from pyquery import PyQuery
 
 """
     适配 拉勾网-拉勾教育 网页保存
@@ -78,40 +77,47 @@ def get_pure_text(file_path, img_path):
     f.close()
 
     # 使用pyquery解析网页
-    doc = pq(content)
+    doc = PyQuery(content)
+
     # 获取正文
     text = doc(".right-content-wrap")
     # 移除音频媒体
     text(".media-player-wrap").remove()
+    if not text:
+        # 如果已经处理或者没有指定节点则跳过
+        text = doc
 
     # 处理图片资源路径
     for i in text.items('img'):
-        src = escape(i.attr('src'))
-        if src.endswith(".png") or src.endswith(".jpg"):
-            local_img_dir_path = img_path.split("/")[-1]
-            # svg 图片 不处理
+        src = i.attr('src')
+        # 图片资源路径空
+        if not None == src:
+            if src.endswith(".png") or src.endswith(".jpg"):
+                local_img_dir_path = img_path.split("/")[-1]
+                # svg 图片 不处理
 
-            # 本地图片 设置新路径
-            if src.startswith("./"):
-                split_path = src.split("/")
-                split_path[1] = local_img_dir_path
-                src_new = "/".join(split_path)
-                i.attr("src", src_new)
-
-            # 网络图片 指向本地图片
-            if src.startswith("http"):
-                split_path = src.split("/")
-                split_path[1] = local_img_dir_path
-                file_name = split_path[-1]
-
-                src_new = os.path.join(os.path.join("./", local_img_dir_path), file_name)
-                src_in_img = os.path.join(img_path, file_name)
-                # 判断本地文件是否包含
-                if os.path.exists(src_in_img):
+                # 本地图片 设置新路径
+                if src.startswith("./"):
+                    split_path = src.split("/")
+                    split_path[1] = local_img_dir_path
+                    src_new = "/".join(split_path)
                     i.attr("src", src_new)
+
+                # 网络图片 指向本地图片
+                if src.startswith("http"):
+                    split_path = src.split("/")
+                    split_path[1] = local_img_dir_path
+                    file_name = split_path[-1]
+
+                    src_new = os.path.join(os.path.join("./", local_img_dir_path), file_name)
+                    src_in_img = os.path.join(img_path, file_name)
+                    # 判断本地文件是否包含
+                    if os.path.exists(src_in_img):
+                        i.attr("src", src_new)
+
     # 去除乱七八糟标签
-    for i in text.items("div"):
-        i.remove_attr("class")
+    # for i in text.items("div"):
+    #     i.remove_attr("class")
     for i in text.items("p"):
         i.remove_attr("data-nodeid")
 
