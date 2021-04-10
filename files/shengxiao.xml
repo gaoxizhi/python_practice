@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project default="clean-build">
+    <xparam name="shengxiao">
+        <maps id="01">鼠</maps>
+        <maps id="02">牛</maps>
+        <maps id="03">虎</maps>
+        <maps id="04">兔</maps>
+        <maps id="05">龙</maps>
+        <maps id="06">蛇</maps>
+        <maps id="07">马</maps>
+        <maps id="08">羊</maps>
+        <maps id="09">猴</maps>
+        <maps id="10">鸡</maps>
+        <maps id="11">狗</maps>
+        <maps id="12">猪</maps>
+    </xparam>
+
+    <sql id="Base_Column_List" name="sql">
+        id, gmt_create, gmt_modified, creator, modifier, board_id, card_id, sort_value
+    </sql>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac
+                srcdir="src" destdir="build/classes"
+                classpath="./classes/js.jar"
+        />
+    </target>
+
+    <target name="jar">
+        <mkdir dir="build/jar"/>
+        <jar jarfile="build/jar/jsrun.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="JsRun"/>
+                <attribute name="Class-Path" value="./java/classes/js.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="debugjar">
+        <mkdir dir="build/jar"/>
+        <jar jarfile="build/jar/jsdebug.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="JsDebugRun"/>
+                <attribute name="Class-Path" value="./java/classes/js.jar"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="clean-build" depends="clean,compile,jar"/>
+    <target name="clean-debug" depends="clean,compile,debugjar"/>
+</project>
