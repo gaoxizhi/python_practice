@@ -32,6 +32,7 @@ html_ending = """
 </html>
 """
 
+
 def main():
     # 设置父目录
     dir_path = "/Users/gaox/Documents/拉勾教育"
@@ -57,8 +58,7 @@ def main():
                     for k in os.listdir(chapter_path):
                         file_path = os.path.join(chapter_path, k)
                         # 2、进入其子目录将图片资源移动到img_path，已存在则不处理
-                        if file_path.endswith(".png") or file_path.endswith(".jpg") or file_path.endswith("jpeg") \
-                                or file_path.endswith("bmp") or file_path.endswith("gif"):
+                        if is_img(file_path):
                             if not os.path.exists(os.path.join(img_path, k)):
                                 shutil.move(file_path, img_path)
 
@@ -87,21 +87,24 @@ def get_pure_text(file_path, img_path):
     # 使用pyquery解析网页
     doc = PyQuery(content)
 
+    # 判断是否包含节点，如果不包含，不进行添加class、不进行html拼接
+    has_point = True
+
     # 获取正文
     text = doc(".right-content-wrap")
     # 移除音频媒体
     text(".media-player-wrap").remove()
     if not text:
         # 如果已经处理或者没有指定节点则跳过
+        has_point = False
         text = doc
 
     # 处理图片资源路径
     for i in text.items('img'):
         src = i.attr('src')
         # 图片资源路径空
-        if not None == src:
-            if src.endswith(".png") or src.endswith(".jpg") or file_path.endswith("jpeg") \
-                    or file_path.endswith("bmp") or file_path.endswith("gif"):
+        if not src:
+            if is_img(src):
                 local_img_dir_path = img_path.split("/")[-1]
                 # 本地图片 设置新路径
                 if src.startswith("./"):
@@ -139,17 +142,36 @@ def get_pure_text(file_path, img_path):
             i.remove_attr("data-nodeid")
 
     # 设置正文class属性，保证脚本可重新执行
-    text.attr("class", "right-content-wrap")
+    if has_point:
+        text.attr("class", "right-content-wrap")
 
     # 使用正则去除data-v标签
     html = re.sub(r'data-v-.*?""', "", str(text.html()))
     # 拼接完整html文件
-    html = html_front + html + html_ending
+    if has_point:
+        html = html_front + html + html_ending
+
+    # 文件内容一致时，不要修改
+    if html != content:
+        f = open(file_path, "w", encoding="utf-8")
+        f.write(html)
+        f.close()
 
 
-    f = open(file_path, "w", encoding="utf-8")
-    f.write(html)
-    f.close()
+# 判断是否为图片类型
+def is_img(file_name):
+    # None返回False
+    if file_name:
+        return False
+    # 空字符串，返回False
+    if "" == file_name:
+        return False
+
+    if file_name.endswith(".png") or file_name.endswith(".jpg") or file_name.endswith("jpeg") or file_name.endswith(
+            "bmp") or file_name.endswith("gif"):
+        return True
+    # 其他情况，返回False
+    return False
 
 
 if __name__ == "__main__":
