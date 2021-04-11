@@ -19,6 +19,18 @@ from pyquery import PyQuery
     6、移除空目录
 """
 
+html_front = """<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+"""
+
+html_ending = """
+</body>
+</html>
+"""
 
 def main():
     # 设置父目录
@@ -129,21 +141,11 @@ def get_pure_text(file_path, img_path):
     # 设置正文class属性，保证脚本可重新执行
     text.attr("class", "right-content-wrap")
 
-    # 拼接完整html文件
-    html = """<!DOCTYPE html>
-    <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    </head>
-    <body>
-    """ + str(text) + """
-    </body>
-    </html>
-    """
-
     # 使用正则去除data-v标签
-    html = re.sub(r'data-v-.*?""', "", html)
-    html = str(PyQuery(html).html())
+    html = re.sub(r'data-v-.*?""', "", str(text.html()))
+    # 拼接完整html文件
+    html = html_front + html + html_ending
+
 
     f = open(file_path, "w", encoding="utf-8")
     f.write(html)
