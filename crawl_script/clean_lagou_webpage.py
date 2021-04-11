@@ -111,6 +111,12 @@ def get_pure_text(file_path, img_path):
 
     # svg 图片 清理点赞图标 class="message-list-title-right"
     text(".message-list-title-right").remove()
+    # 正文评论分隔符，只会处理第一个
+    text(".main-wrap").append("<hr/>")
+    # 评论间分隔符
+    for i in text.items('.message-list'):
+        i.append("<hr/>")
+
     # 去除乱七八糟标签
     # 或者只保留：href、src、alt、style
     label = ["p", "code", "li", "ul", "strong", "div", "img", "h2", "h3", "h4", "span", "a"]
