@@ -90,8 +90,6 @@ def get_pure_text(file_path, img_path):
             if src.endswith(".png") or src.endswith(".jpg") or file_path.endswith("jpeg") \
                     or file_path.endswith("bmp") or file_path.endswith("gif"):
                 local_img_dir_path = img_path.split("/")[-1]
-                # svg 图片 不处理
-
                 # 本地图片 设置新路径
                 if src.startswith("./"):
                     split_path = src.split("/")
@@ -111,11 +109,18 @@ def get_pure_text(file_path, img_path):
                     if os.path.exists(src_in_img):
                         i.attr("src", src_new)
 
+    # svg 图片 清理点赞图标 class="message-list-title-right"
+    text(".message-list-title-right").remove()
     # 去除乱七八糟标签
-    # for i in text.items("div"):
-    #     i.remove_attr("class")
-    for i in text.items("p"):
-        i.remove_attr("data-nodeid")
+    # 或者只保留：href、src、alt、style
+    label = ["p", "code", "li", "ul", "strong", "div", "img", "h2", "h3", "h4", "span", "a"]
+    for key in label:
+        for i in text.items(key):
+            i.remove_attr("class")
+            i.remove_attr("data-nodeid")
+
+    # 设置正文class属性，保证脚本可重新执行
+    text.attr("class", "right-content-wrap")
 
     # 拼接完整html文件
     html = """<!DOCTYPE html>
