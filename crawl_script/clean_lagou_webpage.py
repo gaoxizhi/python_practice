@@ -1,6 +1,7 @@
 # -*-encoding=utf-8-*-
 
 import os
+import re
 import shutil
 
 from pyquery import PyQuery
@@ -21,7 +22,7 @@ from pyquery import PyQuery
 
 def main():
     # 设置父目录
-    dir_path = "/Users/gaox/Downloads/new"
+    dir_path = "/Users/gaox/Documents/拉勾教育"
     dir = os.listdir(dir_path)
     # 遍历父目录，以其子项为最小单元
     for i in dir:
@@ -139,6 +140,10 @@ def get_pure_text(file_path, img_path):
     </body>
     </html>
     """
+
+    # 使用正则去除data-v标签
+    html = re.sub(r'data-v-.*?""', "", html)
+    html = str(PyQuery(html).html())
 
     f = open(file_path, "w", encoding="utf-8")
     f.write(html)
