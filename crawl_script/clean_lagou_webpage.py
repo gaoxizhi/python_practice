@@ -36,9 +36,9 @@ html_ending = """
 def main():
     # 设置父目录
     dir_path = "/Users/gaox/Documents/拉勾教育"
-    dir = os.listdir(dir_path)
+    parent_dir = os.listdir(dir_path)
     # 遍历父目录，以其子项为最小单元
-    for i in dir:
+    for i in parent_dir:
         # 子目录处理
         sub_dir_path = os.path.join(dir_path, i)
         if os.path.isdir(sub_dir_path):
@@ -103,7 +103,7 @@ def get_pure_text(file_path, img_path):
     for i in text.items('img'):
         src = i.attr('src')
         # 图片资源路径空
-        if not src:
+        if src:
             if is_img(src):
                 local_img_dir_path = img_path.split("/")[-1]
                 # 本地图片 设置新路径
@@ -161,7 +161,7 @@ def get_pure_text(file_path, img_path):
 # 判断是否为图片类型
 def is_img(file_name):
     # None返回False
-    if file_name:
+    if not file_name:
         return False
     # 空字符串，返回False
     if "" == file_name:
