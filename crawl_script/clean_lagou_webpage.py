@@ -90,6 +90,9 @@ def get_pure_text(file_path, img_path):
     # 判断是否包含节点，如果不包含，不进行添加class、不进行html拼接
     has_point = True
 
+    # main-title 正文标题
+    title = doc(".main-title")
+
     # 获取正文
     text = doc(".right-content-wrap")
     # 移除音频媒体
@@ -141,18 +144,28 @@ def get_pure_text(file_path, img_path):
             i.remove_attr("class")
             i.remove_attr("data-nodeid")
 
-    # 设置正文class属性，保证脚本可重新执行
+    # 设置正文和标题class属性，保证脚本可重新执行
     if has_point:
         text.attr("class", "right-content-wrap")
+    if not title.text().strip() == "":
+        title.attr("class", "main-title")
 
     # 使用正则去除data-v标签
-    html = re.sub(r'data-v-.*?""', "", str(text.html()))
+    html = re.sub(r'data-v-.*?""', "", str(text))
     # 拼接完整html文件
     if has_point:
         html = html_front + html + html_ending
 
     # 文件内容一致时，不要修改
     if html != content:
+        paths = file_path.split("/")
+        paths[-1] = title.text() + ".html"
+        file_path_now = "/".join(paths)
+        # 移除原文件，只保留一份
+        if file_path_now == file_path_now:
+            os.remove(file_path)
+            file_path = file_path_now
+
         f = open(file_path, "w", encoding="utf-8")
         f.write(html)
         f.close()
